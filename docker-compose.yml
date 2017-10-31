@@ -5,7 +5,7 @@ networks:
 
 services:
   cadvisor:
-    image: google/cadvisor:${CADVISOR_VERSION:-v0.26.1}
+    image: google/cadvisor:v0.27.2
     networks:
       - monitoring
     volumes:
@@ -23,9 +23,12 @@ services:
         reservations:
           cpus: '0.10'
           memory: 64M
+      placement:
+        constraints:
+          - node.platform.os==linux
 
   node-exporter:
-    image: basi/node-exporter:${NODE_EXPORTER_VERSION:-latest}
+    image: basi/node-exporter:v1.15.0
     networks:
       - monitoring
     volumes:
@@ -46,9 +49,12 @@ services:
         reservations:
           cpus: '0.10'
           memory: 16M
+      placement:
+        constraints:
+          - node.platform.os==linux
 
   docker-exporter:
-    image: basi/socat:${DOCKER_EXPORTER_VERSION:-v0.1.0}
+    image: basi/socat:v0.1.0
     networks:
       - monitoring
     deploy:
@@ -60,9 +66,12 @@ services:
         reservations:
           cpus: '0.05'
           memory: 4M
+      placement:
+        constraints:
+          - node.platform.os==linux
 
   alertmanager:
-    image: basi/alertmanager:${ALERTMANAGER_VERSION:-v0.8.0}
+    image: basi/alertmanager:v0.9.1
     networks:
       - monitoring
     # ports:
@@ -81,9 +90,12 @@ services:
         reservations:
           cpus: '0.01'
           memory: 16M
+      placement:
+        constraints:
+          - node.platform.os==linux
 
   prometheus:
-    image: basi/prometheus-swarm:${PROMETHEUS_SWARM_VERSION:-latest}
+    image: basi/prometheus-swarm:v1.7.1
     ports:
       - "9090"
     networks:
@@ -99,9 +111,12 @@ services:
         reservations:
           cpus: '0.50'
           memory: 128M
+      placement:
+          constraints:
+            - node.platform.os==linux
 
   grafana:
-    image: basi/grafana:${GRAFANA_VERSION:-4.4.3}
+    image: basi/grafana:4.5.2
     ports:
       - "3000:3000"
     networks:
@@ -122,3 +137,6 @@ services:
         reservations:
           cpus: '0.50'
           memory: 32M
+      placement:
+        constraints:
+          - node.platform.os==linux
